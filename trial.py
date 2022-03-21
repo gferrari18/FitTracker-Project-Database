@@ -1,5 +1,11 @@
 import os
 
+def num(text):
+    while text.isnumeric() == False:
+        print("You must enter a number.")
+        text = input("Enter your " + text + "using numbers")
+
+
 usertype = input("Have you registered before? (type Yes or No): ")
 usertypeUP = usertype.upper()
 
@@ -48,4 +54,6 @@ elif usertypeUP == "NO": #creates file for new user
     print("Welcome, " + user.capitalize() + ".")
 
 
+print("Let's get your measurements and compare it to last the last time you used this software.")
+weight = input("Please enter your weight: ")
 
