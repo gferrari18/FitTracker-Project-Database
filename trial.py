@@ -1,3 +1,4 @@
+from curses.ascii import isalpha
 import os
 
 def num(text):
@@ -30,7 +31,7 @@ if usertypeUP == "YES":
         f.close
         f = open(userUP + ".txt", "r")
     f.close()
-    print("Welcome back, " + user.capitaliza() + ".")
+    print("Welcome back, " + user.capitalize() + ".")
 
                                  
 elif usertypeUP == "NO": #creates file for new user
@@ -54,6 +55,27 @@ elif usertypeUP == "NO": #creates file for new user
     print("Welcome, " + user.capitalize() + ".")
 
 
-print("Let's get your measurements and compare it to last the last time you used this software.")
+
+
 weight = input("Please enter your weight: ")
+while weight.isalpha():
+    print("You must enter a number.")
+    weight = input("Enter it now using numbers: ")
+
+waist = input("Please enter your waist measurement: ")
+while waist.isalpha():
+    print("You must enter a number.")
+    waist = input("Enter it now using numbers: ")
+
+arms = input("Enter your arm (biceps/triceps) measurement: ")
+while arms.isalpha():
+    print("You must enter a number.")
+    arms = input("Enter it now using numbers: ")
+
+thighs = input("Enter your thigh measurement: ")
+while thighs.isalpha():
+    print("You must enter a number.")
+    thighs = input("Enter it now using numbers: ")
+
+measurements = (weight, waist, arms, thighs) #placing measurements into a tuple
 
