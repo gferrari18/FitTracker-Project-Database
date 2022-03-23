@@ -1,4 +1,3 @@
-from curses.ascii import isalpha
 import os
 
 def num(text):
@@ -53,8 +52,6 @@ elif usertypeUP == "NO": #creates file for new user
     f.write(user + "\n")
 
     print("Welcome, " + user.capitalize() + ".")
-
-
 
 
 weight = input("Please enter your weight: ")

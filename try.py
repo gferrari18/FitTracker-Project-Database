@@ -10,8 +10,6 @@ num(hue)
 
 
 
-myfile = open("nice.txt", "r")
-myline = myfile.readline()
-print(myline)
-myfile.close()
-
+myfile = open("nice.py", "r")
+for x in myfile:
+    print(x)
