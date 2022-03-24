@@ -1,9 +1,14 @@
-train = ""
+# opening the file in read mode
+file = open("motivation.txt", "r")
+replacement = ""
+# using the for loop
+for line in file:
+    line = line.strip()
+    changes = line.replace("hardships", "situations")
+    replacement = replacement + changes + "\n"
 
-while train != "DONE":
-    train = input("Enter an exercise you plan to do, or type DONE when you have added all desired exercises for a day ")
-    if train != "DONE":
-        set = input("enter how many sets you plan to do: ")
-        reps = input("Enter how many reps you plan to do: ")
-        weight = input("enter how much weight you plan to do, or how much weight you have lifted: ")
-
+file.close()
+# opening the file in write mode
+fout = open("motivation.txt", "w")
+fout.write(replacement)
+fout.close()
