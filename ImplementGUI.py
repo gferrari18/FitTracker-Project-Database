@@ -4,6 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import os
+from nonregusrscreen import Ui_NonRegUserScreen
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class mainwindow(QWidget): #mainwindow will INHERIT everything from QWidget
@@ -64,7 +66,7 @@ class mainwindow(QWidget): #mainwindow will INHERIT everything from QWidget
         self.back.setVisible(False)
 
 
-        self.btn2.clicked.connect(self.User)
+        self.btn2.clicked.connect(self.openwindow)
         self.btn1.clicked.connect(self.User)
         self.back.clicked.connect(self.restart)
         self.sbmt.clicked.connect(self.getname)
@@ -107,9 +109,11 @@ class mainwindow(QWidget): #mainwindow will INHERIT everything from QWidget
             self.label4.setText("Welcome back, " + name)
             self.label4.move(50,20)
         f.close()
-
-
-             
+    def openwindow(self):
+        self.window = QtWidgets.QDialog()
+        self.ui = Ui_NonRegUserScreen()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 
 def main():
