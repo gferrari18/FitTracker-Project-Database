@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(490, 200, 141, 31))
-        self.pushButton_2.clicked.connect(self.openwindow)
+        
         
         font = QtGui.QFont()
         font.setFamily("Arial")
