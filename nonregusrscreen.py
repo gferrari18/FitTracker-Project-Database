@@ -42,7 +42,6 @@ class Ui_NonRegUserScreen(object):
 
         self.pushButton_2 = QtWidgets.QPushButton(NonRegUserScreen)
         self.pushButton_2.setGeometry(QtCore.QRect(450, 110, 141, 31))
-        self.pushButton_2.clicked.connect(lambda: self.close())
 
         font = QtGui.QFont()
         font.setFamily("Arial")
