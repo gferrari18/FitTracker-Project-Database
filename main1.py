@@ -1,4 +1,4 @@
-from nonregusrscreen import Ui_NonRegUserScreen
+from nonregusrscreen1 import NonReg
 from Main import Ui_MainWindow     # needs to import from the main file
 from PyQt5 import QtCore, QtGui, QtWidgets #importing PyQt functionality
 
@@ -11,7 +11,7 @@ class mainWin(QtWidgets.QMainWindow, Ui_MainWindow): #mainWin is new subclass. Q
     
     def openwindow(self):
         self.window = QtWidgets.QDialog()
-        self.ui = Ui_NonRegUserScreen()
+        self.ui = NonReg()
         self.ui.setupUi(self.window)
         self.window.show()
 
