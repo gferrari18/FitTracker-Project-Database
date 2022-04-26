@@ -2,7 +2,9 @@ from Main import Ui_MainWindow
 from nonregusrscreen import Ui_NonRegUserScreen
 from PyQt5 import QtCore, QtGui, QtWidgets
 from reguserscreen import Ui_RegUserScreen
+from Choose import Ui_Choose
 import os
+
 
 class Firstwindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -29,8 +31,7 @@ class NonRegwindow(QtWidgets.QDialog, Ui_NonRegUserScreen):
             f.close()
 
         elif f.readline() == "":
-            print("Welcome, " + user.capitalize() + ".")
-
+            Manager.openchoice
 
 class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen):
     def __init__(self, parent=None):
@@ -48,9 +49,15 @@ class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen):
             self.entername.setText("This name does not seem to be registered.")
             f.close()
             os.remove(userUP + ".txt")
-            
-        else: print("Mahoe")            
 
+        else: Manager.openchoice
+
+class Choose(QtWidgets.QDialog, Ui_Choose):
+    def __init(self, parent=None):
+        super(Choose, self).__init__(parent)
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.hide)
+        self.pushButton_2.clicked.connect(self.hide)
     
 
 class Manager:
@@ -60,6 +67,7 @@ class Manager:
         self.first = Firstwindow()
         self.second = NonRegwindow()
         self.third = Regwindow()
+        self.choose = Choose()
 
         self.first.pushButton.clicked.connect(self.third.show)
         self.first.pushButton_2.clicked.connect(self.second.show)
@@ -72,6 +80,12 @@ class Manager:
 
         #linked to functions related to Reg window
         self.third.pushButton.clicked.connect(self.third.openuser)
+
+    def openchoice(self):
+        print("debug")
+        self.second.hide()
+        self.third.hide()
+        self.choose.show()
 
 if __name__ == '__main__':
     import sys
