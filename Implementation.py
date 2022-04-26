@@ -37,44 +37,7 @@ def average(m, n, o):
     f.close()
 
 
-loopback = True
-while loopback:
-    loopback = False
 
-    usertype = input("Have you registered before? (type Yes or No): ")
-    usertypeUP = usertype.upper()
-
-    if usertypeUP == "YES":
-        user = input("Please enter your name: ")
-        userUP = user.upper()
-        f = open(userUP + ".txt", "a") #if start with "r", will give an error if file does not exist
-        f.close()
-        f = open(userUP + ".txt", "r")
-        while f.readline() == "": #loopback returns
-            print("This name does not seem to be registered.")
-            f.close()
-            os.remove(userUP + ".txt")
-            loopback = True
-            break
-        f.close()
-        if loopback == False:
-            print("Welcome back, " + user.capitalize() + ".")
-
-                                    
-    elif usertypeUP == "NO": #creates file for new user
-        user = input("Please enter your name: ")
-        userUP = user.upper()
-        f = open(userUP + ".txt", "a")
-        f.close()
-        f = open(userUP + ".txt", "r")
-        while f.readline() != "": #this loop ensure another file with the same name does not exist
-            f.close()
-            print("This name is already in use.")
-            loopback = True
-            break
-        f.close()
-        if loopback == False:
-            print("Welcome, " + user.capitalize() + ".")
 
 
 weight = num("Please enter your weight: ")
