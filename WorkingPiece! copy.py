@@ -63,11 +63,21 @@ class Choose(QtWidgets.QDialog, Ui_Choose):
         self.pushButton.clicked.connect(self.hide)
         self.pushButton_2.clicked.connect(self.hide)
 
+
 class Measure1(QtWidgets.QDialog, Ui_measure1):
     def __init__(self, parent=None):
         super(Measure1, self).__init__(parent)
         self.setupUi(self)
+        self.sec = Measure2()
         self.pushButton_2.clicked.connect(self.hide)
+        self.pushButton.clicked.connect(self.openmeasure2)
+
+    def openmeasure2(self):
+        self.hide()
+        self.sec.setupUi(self)
+        self.show()
+
+
 
 class Measure2(QtWidgets.QDialog, Ui_measure2):
     def __init__(self, parent=None):
