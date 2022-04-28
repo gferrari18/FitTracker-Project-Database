@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_measure1(object):
     def setupUi(self, measure1):
         measure1.setObjectName("measure1")
-        measure1.resize(800, 700)
+        measure1.resize(800, 624)
         self.entername = QtWidgets.QLabel(measure1)
-        self.entername.setGeometry(QtCore.QRect(10, 30, 781, 41))
+        self.entername.setGeometry(QtCore.QRect(10, 60, 781, 41))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
@@ -67,7 +67,7 @@ class Ui_measure1(object):
         self.entername_5.setAlignment(QtCore.Qt.AlignCenter)
         self.entername_5.setObjectName("entername_5")
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(measure1)
-        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(140, 150, 661, 41))
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(140, 150, 2731, 41))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -134,6 +134,15 @@ class Ui_measure1(object):
         self.pushButton_2 = QtWidgets.QPushButton(measure1)
         self.pushButton_2.setGeometry(QtCore.QRect(530, 490, 181, 61))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.entername_6 = QtWidgets.QLabel(measure1)
+        self.entername_6.setGeometry(QtCore.QRect(10, 10, 781, 41))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(20)
+        font.setKerning(False)
+        self.entername_6.setFont(font)
+        self.entername_6.setAlignment(QtCore.Qt.AlignCenter)
+        self.entername_6.setObjectName("entername_6")
 
         self.retranslateUi(measure1)
         QtCore.QMetaObject.connectSlotsByName(measure1)
@@ -141,13 +150,14 @@ class Ui_measure1(object):
     def retranslateUi(self, measure1):
         _translate = QtCore.QCoreApplication.translate
         measure1.setWindowTitle(_translate("measure1", "Dialog"))
-        self.entername.setText(_translate("measure1", "Enter measurements using numbers:"))
+        self.entername.setText(_translate("measure1", "Enter your measurements:"))
         self.entername_2.setText(_translate("measure1", "Weight"))
         self.entername_3.setText(_translate("measure1", "Waist"))
         self.entername_4.setText(_translate("measure1", "Arms(Avg.)"))
         self.entername_5.setText(_translate("measure1", "Thighs(Avg.)"))
         self.pushButton.setText(_translate("measure1", "Submit"))
         self.pushButton_2.setText(_translate("measure1", "Return"))
+        self.entername_6.setText(_translate("measure1", "user"))
 
 
 if __name__ == "__main__":

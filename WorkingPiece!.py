@@ -33,14 +33,14 @@ class NonRegwindow(QtWidgets.QDialog, Ui_NonRegUserScreen):
             f.close()
 
         elif f.readline() == "":
-            Manager.openchoice
+            manager.openchoice()
 
 class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen):
+    
     def __init__(self, parent=None):
         super(Regwindow, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.hide)
-        
 
     def openuser(self):
         user = self.lineEdit.text()
@@ -52,9 +52,10 @@ class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen):
             self.entername.setText("This name does not seem to be registered.")
             f.close()
             os.remove(userUP + ".txt")
-
-        else: manager.openchoice()
-
+        
+        else:
+            manager.openchoice()
+            
 
 class Choose(QtWidgets.QDialog, Ui_Choose):
     def __init__(self, parent=None):
@@ -62,12 +63,22 @@ class Choose(QtWidgets.QDialog, Ui_Choose):
         self.setupUi(self)
         self.pushButton.clicked.connect(self.hide)
         self.pushButton_2.clicked.connect(self.hide)
+        
 
 class Measure1(QtWidgets.QDialog, Ui_measure1):
     def __init__(self, parent=None):
         super(Measure1, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.hide)
+        self.regwin = Regwindow()
+
+    def PushMeasurement(self):
+        print(self.spinweight.text())
+        user = self.entername_6.text()
+        userUP = user.upper()
+        f = open(userUP + ".txt", "a")
+        f.write("Mahoe")
+        f.close()
 
 class Measure2(QtWidgets.QDialog, Ui_measure2):
     def __init__(self, parent=None):
@@ -75,7 +86,6 @@ class Measure2(QtWidgets.QDialog, Ui_measure2):
         self.setupUi(self)
         self.pushButton_3.clicked.connect(self.hide)
 
-    
 
 class Manager:
     def __init__(self):
@@ -100,16 +110,23 @@ class Manager:
         self.first.show()
 
 
-
         #linked to functions related to NonReg window
         self.second.pushButton.clicked.connect(self.second.register)
 
         #linked to functions related to Reg window
         self.third.pushButton.clicked.connect(self.third.openuser)
 
+        #linked to functions related to measure1
+        self.measure1.pushButton.clicked.connect(self.measure1.PushMeasurement)
+    
+
     def openchoice(self):
         self.third.hide()
+        self.second.hide()
         self.choose.show()
+        if self.third.lineEdit.text() != "":
+            self.measure1.entername_6.setText((self.third.lineEdit.text()).capitalize())
+        else: self.measure1.entername_6.setText((self.second.lineEdit.text()).capitalize())
 
 if __name__ == '__main__':
     import sys
