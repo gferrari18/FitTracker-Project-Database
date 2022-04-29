@@ -90,11 +90,23 @@ class Measure1(QtWidgets.QDialog, Ui_measure1):
         manager.openmeasure2()
 
 
+
 class Measure2(QtWidgets.QDialog, Ui_measure2):
     def __init__(self, parent=None):
         super(Measure2, self).__init__(parent)
         self.setupUi(self)
+        self.measure1 = Measure1()
         self.pushButton_3.clicked.connect(self.hide)
+        self.pushButton_4.clicked.connect(self.updatetable)
+
+    def updatetable(self):
+        self.wecur.setText(self.measure1.spinweight.text())
+        manager.average("1-", self.measure1.spinweight.text(),self.weavg.setText)
+        
+
+
+
+    
 
 
 
@@ -130,6 +142,9 @@ class Manager:
 
         #linked to functions related to measure1
         self.measure1.pushButton.clicked.connect(self.measure1.PushMeasurement)
+
+        #linked to functions related to measure2
+        
         
 
     def openchoice(self):
@@ -146,6 +161,24 @@ class Manager:
     def openmeasure2(self):
         self.measure1.hide()
         self.measure2.show()
+
+
+    def average(self, n, o, add):
+        userUP = self.measure2.entername_8.text().upper()
+        f = open(userUP + ".txt", "r")
+        avg = 0
+        hm = 0
+        for line in f:
+            if line.startswith(n):
+                hm = hm + float(line[2:].strip())
+                avg = avg + 1
+        resavg = hm / avg
+        avgtot = (float(o) - float(resavg))
+        add(str(avgtot))
+        f.close()
+
+        
+
 
 if __name__ == '__main__':
     import sys
