@@ -6,6 +6,7 @@ from Choose import Ui_Choose
 from measure1 import Ui_measure1
 from measure2 import Ui_measure2
 import os
+import time
 
 
 class Firstwindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -70,21 +71,32 @@ class Measure1(QtWidgets.QDialog, Ui_measure1):
         super(Measure1, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.hide)
-        self.regwin = Regwindow()
 
     def PushMeasurement(self):
-        print(self.spinweight.text())
+        weight = "1-" + self.spinweight.text()
+        waist = "2-" + self.spinwaist.text()
+        arms = "3-" + self.spinarms.text()
+        thighs = "4-" + self.spinthighs.text()
+
         user = self.entername_6.text()
         userUP = user.upper()
         f = open(userUP + ".txt", "a")
-        f.write("Mahoe")
+        f.write(weight + "\n")
+        f.write(waist + "\n")
+        f.write(arms + "\n")
+        f.write(thighs + "\n")
         f.close()
+        time.sleep(1)
+        manager.openmeasure2()
+
 
 class Measure2(QtWidgets.QDialog, Ui_measure2):
     def __init__(self, parent=None):
         super(Measure2, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_3.clicked.connect(self.hide)
+
+
 
 
 class Manager:
@@ -118,7 +130,7 @@ class Manager:
 
         #linked to functions related to measure1
         self.measure1.pushButton.clicked.connect(self.measure1.PushMeasurement)
-    
+        
 
     def openchoice(self):
         self.third.hide()
@@ -126,7 +138,14 @@ class Manager:
         self.choose.show()
         if self.third.lineEdit.text() != "":
             self.measure1.entername_6.setText((self.third.lineEdit.text()).capitalize())
-        else: self.measure1.entername_6.setText((self.second.lineEdit.text()).capitalize())
+            self.measure2.entername_8.setText((self.third.lineEdit.text()).capitalize())
+        else: 
+            self.measure1.entername_6.setText((self.second.lineEdit.text()).capitalize())
+            self.measure2.entername_8.setText((self.second.lineEdit.text()).capitalize())
+
+    def openmeasure2(self):
+        self.measure1.hide()
+        self.measure2.show()
 
 if __name__ == '__main__':
     import sys
