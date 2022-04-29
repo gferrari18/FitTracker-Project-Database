@@ -7,6 +7,7 @@ from measure1 import Ui_measure1
 from measure2 import Ui_measure2
 import os
 import time
+import collections
 
 
 class Firstwindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -72,6 +73,7 @@ class Measure1(QtWidgets.QDialog, Ui_measure1):
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.hide)
 
+
     def PushMeasurement(self):
         weight = "1-" + self.spinweight.text()
         waist = "2-" + self.spinwaist.text()
@@ -86,6 +88,7 @@ class Measure1(QtWidgets.QDialog, Ui_measure1):
         f.write(arms + "\n")
         f.write(thighs + "\n")
         f.close()
+        manager.upmeasure2()
         time.sleep(1)
         manager.openmeasure2()
 
@@ -95,20 +98,21 @@ class Measure2(QtWidgets.QDialog, Ui_measure2):
     def __init__(self, parent=None):
         super(Measure2, self).__init__(parent)
         self.setupUi(self)
-        self.measure1 = Measure1()
         self.pushButton_3.clicked.connect(self.hide)
         self.pushButton_4.clicked.connect(self.updatetable)
 
     def updatetable(self):
-        self.wecur.setText(self.measure1.spinweight.text())
-        manager.average("1-", self.measure1.spinweight.text(),self.weavg.setText)
-        
+        manager.average("1-", self.wecur.text(),self.weavg.setText)
+        manager.average("2-", self.wacur.text(),self.waavg.setText)
+        manager.average("3-", self.arcur.text(),self.aravg.setText)
+        manager.average("4-", self.thcur.text(),self.thavg.setText)
+        self.initial()
 
-
-
-    
-
-
+    def initial(self):
+        manager.initial("1-", self.weini.setText)
+        manager.initial("2-", self.waini.setText)
+        manager.initial("3-", self.arini.setText)
+        manager.initial("4-", self.thini.setText)
 
 
 class Manager:
@@ -162,6 +166,12 @@ class Manager:
         self.measure1.hide()
         self.measure2.show()
 
+    def upmeasure2(self):
+        self.measure2.wecur.setText(self.measure1.spinweight.text())
+        self.measure2.wacur.setText(self.measure1.spinwaist.text())
+        self.measure2.arcur.setText(self.measure1.spinarms.text())
+        self.measure2.thcur.setText(self.measure1.spinthighs.text())
+
 
     def average(self, n, o, add):
         userUP = self.measure2.entername_8.text().upper()
@@ -174,8 +184,23 @@ class Manager:
                 avg = avg + 1
         resavg = hm / avg
         avgtot = (float(o) - float(resavg))
-        add(str(avgtot))
+        avgtotd = "{:.2f}".format(avgtot)
+        add(str(avgtotd))
         f.close()
+
+    def initial(self, n, add):
+        userUP = self.measure2.entername_8.text().upper()
+        measure = collections.deque()
+        f = open(userUP + ".txt", "r")
+        for line in f:
+            if line.startswith(n):
+                hm = line[2:].strip()
+                measure.append(hm)
+        l = measure.popleft()
+        print(str(l))
+        add(l)
+
+
 
         
 
