@@ -120,6 +120,24 @@ class EnterEx(QtWidgets.QDialog, Ui_EnterEx):
         super(EnterEx, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.hide)
+        combox2list = []
+        self.comboBox_2.addItems(combox2list)
+        self.pushButton.clicked.connect(self.appendex)
+
+
+    def appendex(self):
+        if self.comboBox.currentText() == "":
+            self.label_6.setText("You must choose a Muscle Group")
+        else:
+            userUP = (self.entername.text()).upper()
+            entry = ((self.comboBox.currentText())+ " " + (self.comboBox_2.currentText())+ " " + (self.spinBox.text())+ " " + (self.spinBox_2.text()) + " " + (self.spinBox_3.text())+ "\n")
+            f = open(userUP + ".txt", "a")
+            f.write(entry)
+            f.close()
+            self.label_6.setText("Entry for " + (self.comboBox_2.currentText()) + " was registered")
+            self.comboBox.setCurrentIndex(0)
+
+
 
 
 
@@ -145,6 +163,7 @@ class Manager:
         self.measure2.pushButton_3.clicked.connect(self.choose.show)
         self.choose.pushButton.clicked.connect(self.measure1.show)
         self.choose.pushButton_2.clicked.connect(self.enterex.show)
+        self.choose.pushButton_2.clicked.connect(self.UpdateComBox)
         self.enterex.pushButton_2.clicked.connect(self.choose.show)
         self.first.show()
 
@@ -161,7 +180,6 @@ class Manager:
 
         #linked to functions related to measure2
         
-        
 
     def openchoice(self):
         self.third.hide()
@@ -170,9 +188,11 @@ class Manager:
         if self.third.lineEdit.text() != "":
             self.measure1.entername_6.setText((self.third.lineEdit.text()).capitalize())
             self.measure2.entername_8.setText((self.third.lineEdit.text()).capitalize())
+            self.enterex.entername.setText((self.third.lineEdit.text()).capitalize())
         else: 
             self.measure1.entername_6.setText((self.second.lineEdit.text()).capitalize())
             self.measure2.entername_8.setText((self.second.lineEdit.text()).capitalize())
+            self.enterex.entername.setText((self.second.lineEdit.text()).capitalize())
 
     def openmeasure2(self):
         self.measure1.hide()
@@ -212,10 +232,27 @@ class Manager:
         print(str(l))
         add(l)
 
-
-
-        
-
+    def UpdateComBox(self):
+        userUP = self.enterex.entername.text().upper()
+        items = []
+        f = open(userUP + ".txt", "r")
+        for line in f:
+            if line.startswith("Arms"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Back"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Chest"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Legs"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Shoulders"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+        self.enterex.comboBox_2.addItems(items)
 
 if __name__ == '__main__':
     import sys
