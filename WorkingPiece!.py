@@ -5,6 +5,7 @@ from reguserscreen import Ui_RegUserScreen
 from Choose import Ui_Choose
 from measure1 import Ui_measure1
 from measure2 import Ui_measure2
+from EnterEx import Ui_EnterEx
 import os
 import time
 import collections
@@ -114,6 +115,13 @@ class Measure2(QtWidgets.QDialog, Ui_measure2):
         manager.initial("3-", self.arini.setText)
         manager.initial("4-", self.thini.setText)
 
+class EnterEx(QtWidgets.QDialog, Ui_EnterEx):
+    def __init__(self, parent=None):
+        super(EnterEx, self).__init__(parent)
+        self.setupUi(self)
+        self.pushButton_2.clicked.connect(self.hide)
+
+
 
 class Manager:
     def __init__(self):
@@ -125,6 +133,7 @@ class Manager:
         self.choose = Choose()
         self.measure1 = Measure1()
         self.measure2 = Measure2()
+        self.enterex = EnterEx()
 
 
 
@@ -135,7 +144,10 @@ class Manager:
         self.measure1.pushButton_2.clicked.connect(self.choose.show)
         self.measure2.pushButton_3.clicked.connect(self.choose.show)
         self.choose.pushButton.clicked.connect(self.measure1.show)
+        self.choose.pushButton_2.clicked.connect(self.enterex.show)
+        self.enterex.pushButton_2.clicked.connect(self.choose.show)
         self.first.show()
+
 
 
         #linked to functions related to NonReg window
