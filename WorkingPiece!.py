@@ -6,6 +6,8 @@ from Choose import Ui_Choose
 from measure1 import Ui_measure1
 from measure2 import Ui_measure2
 from EnterEx import Ui_EnterEx
+from viewex1 import Ui_viewex1
+from viewex2 import Ui_ViewEx2
 import os
 import time
 import collections
@@ -66,6 +68,7 @@ class Choose(QtWidgets.QDialog, Ui_Choose):
         self.setupUi(self)
         self.pushButton.clicked.connect(self.hide)
         self.pushButton_2.clicked.connect(self.hide)
+        self.pushButton_3.clicked.connect(self.hide)
         
 
 class Measure1(QtWidgets.QDialog, Ui_measure1):
@@ -120,14 +123,14 @@ class EnterEx(QtWidgets.QDialog, Ui_EnterEx):
         super(EnterEx, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.hide)
-        combox2list = []
-        self.comboBox_2.addItems(combox2list)
+        self.pushButton_2.clicked.connect(self.comboBox_2.clear)
         self.pushButton.clicked.connect(self.appendex)
+        
 
 
     def appendex(self):
-        if self.comboBox.currentText() == "":
-            self.label_6.setText("You must choose a Muscle Group")
+        if self.comboBox.currentText() == "" or self.comboBox_2.currentText() == "":
+            self.label_6.setText("You must fill all boxes!")
         else:
             userUP = (self.entername.text()).upper()
             entry = ((self.comboBox.currentText())+ " " + (self.comboBox_2.currentText())+ " " + (self.spinBox.text())+ " " + (self.spinBox_2.text()) + " " + (self.spinBox_3.text())+ "\n")
@@ -137,7 +140,30 @@ class EnterEx(QtWidgets.QDialog, Ui_EnterEx):
             self.label_6.setText("Entry for " + (self.comboBox_2.currentText()) + " was registered")
             self.comboBox.setCurrentIndex(0)
 
+class ViewEx1(QtWidgets.QDialog, Ui_viewex1):
+    def __init__(self, parent = None):
+        super(ViewEx1, self).__init__(parent)
+        self.setupUi(self)
+        self.pushButton_2.clicked.connect(self.hide)
+        self.pushButton_2.clicked.connect(self.comboBox_2.clear)
 
+        def viewexcheck(self):
+            if self.comboBox.currentText() == "" or self.comboBox_2.currentText() == "":
+                self.label_6.setText("You must fill all boxes!")
+            else:
+                userUP = (self.entername.text()).upper()   # NEED TO CHANGE THIS SO IT GOES TO THE OTHER SCREEN!
+                entry = ((self.comboBox.currentText())+ " " + (self.comboBox_2.currentText())+ " " + (self.spinBox.text())+ " " + (self.spinBox_2.text()) + " " + (self.spinBox_3.text())+ "\n")
+                f = open(userUP + ".txt", "a")
+                f.write(entry)
+                f.close()
+                self.label_6.setText("Entry for " + (self.comboBox_2.currentText()) + " was registered")
+                self.comboBox.setCurrentIndex(0)
+
+class ViewEx2(QtWidgets.QDialog,Ui_ViewEx2):
+    def __init__(self,parent=None):
+        super(ViewEx2, self).__init__(parent)
+        self.setupUi(self)
+        self.pushButton_3.clicked.connect(self.hide)
 
 
 
@@ -152,6 +178,9 @@ class Manager:
         self.measure1 = Measure1()
         self.measure2 = Measure2()
         self.enterex = EnterEx()
+        self.viewex1 = ViewEx1()
+        self.viewex2 = ViewEx2()
+    
 
 
 
@@ -161,10 +190,15 @@ class Manager:
         self.third.pushButton_2.clicked.connect(self.first.show)
         self.measure1.pushButton_2.clicked.connect(self.choose.show)
         self.measure2.pushButton_3.clicked.connect(self.choose.show)
+        self.viewex1.pushButton.clicked.connect(self.viewex2.show)
         self.choose.pushButton.clicked.connect(self.measure1.show)
         self.choose.pushButton_2.clicked.connect(self.enterex.show)
+        self.choose.pushButton_3.clicked.connect(self.viewex1.show)
         self.choose.pushButton_2.clicked.connect(self.UpdateComBox)
+        self.choose.pushButton_3.clicked.connect(self.UpdateComBox2)
         self.enterex.pushButton_2.clicked.connect(self.choose.show)
+        self.viewex1.pushButton_2.clicked.connect(self.choose.show)
+        self.viewex2.pushButton_3.clicked.connect(self.choose.show)
         self.first.show()
 
 
@@ -189,10 +223,12 @@ class Manager:
             self.measure1.entername_6.setText((self.third.lineEdit.text()).capitalize())
             self.measure2.entername_8.setText((self.third.lineEdit.text()).capitalize())
             self.enterex.entername.setText((self.third.lineEdit.text()).capitalize())
+            self.viewex1.entername.setText((self.third.lineEdit.text()).capitalize())
         else: 
             self.measure1.entername_6.setText((self.second.lineEdit.text()).capitalize())
             self.measure2.entername_8.setText((self.second.lineEdit.text()).capitalize())
             self.enterex.entername.setText((self.second.lineEdit.text()).capitalize())
+            self.viewex1.entername.setText((self.third.lineEdit.text()).capitalize())
 
     def openmeasure2(self):
         self.measure1.hide()
@@ -253,6 +289,33 @@ class Manager:
                 hm = line.strip().split(" ")
                 if hm[1] not in items: items.append(hm[1])
         self.enterex.comboBox_2.addItems(items)
+        self.enterex.comboBox_2.setCurrentIndex(0)
+    
+
+    def UpdateComBox2(self):
+        userUP = self.viewex1.entername.text().upper()
+        items = []
+        f = open(userUP + ".txt", "r")
+        for line in f:
+            if line.startswith("Arms"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Back"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Chest"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Legs"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+            if line.startswith("Shoulders"):
+                hm = line.strip().split(" ")
+                if hm[1] not in items: items.append(hm[1])
+        self.viewex1.comboBox_2.addItems(items)
+        self.viewex1.comboBox_2.setCurrentIndex(0)
+
+
 
 if __name__ == '__main__':
     import sys
