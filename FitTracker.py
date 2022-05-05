@@ -10,6 +10,7 @@ from viewex1 import Ui_viewex1
 from viewex2 import Ui_ViewEx2
 import os
 import collections
+import time
 
 
 class MuscleGroup: #set up class musclegroup so we can sepparate it once entered by user
@@ -102,6 +103,7 @@ class Measure1(QtWidgets.QDialog, Ui_measure1): #sets up screen where user types
         f.write(thighs + "\n")
         f.close()
         manager.upmeasure2()
+        time.sleep(1)
         manager.openmeasure2()
 
 
