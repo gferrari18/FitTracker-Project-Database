@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Main.ui'
+# Form implementation generated from reading ui file 'main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -9,13 +9,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from nonregusrscreen import Ui_NonRegUserScreen
+
 
 class Ui_MainWindow(object):
-   
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 390)
+        MainWindow.setWindowModality(QtCore.Qt.NonModal)
+        MainWindow.setEnabled(True)
+        MainWindow.resize(800, 300)
+        MainWindow.setMinimumSize(QtCore.QSize(800, 300))
+        MainWindow.setMaximumSize(QtCore.QSize(800, 300))
+        MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.HelloWelcome = QtWidgets.QLabel(self.centralwidget)
@@ -42,11 +46,8 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.pushButton.setFont(font)
         self.pushButton.setObjectName("pushButton")
-        
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(490, 200, 141, 31))
-        
-        
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)

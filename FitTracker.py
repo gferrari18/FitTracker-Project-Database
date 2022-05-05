@@ -176,7 +176,6 @@ class ViewEx2(QtWidgets.QDialog,Ui_ViewEx2):
         self.pushButton_3.clicked.connect(self.hide)
 
 
-
 class Manager:
     def __init__(self):
 
@@ -209,8 +208,6 @@ class Manager:
         self.viewex1.pushButton_2.clicked.connect(self.choose.show)
         self.viewex2.pushButton_3.clicked.connect(self.choose.show)
         self.first.show()
-
-        
         self.second.pushButton.clicked.connect(self.second.register)
         self.third.pushButton.clicked.connect(self.third.openuser)
         self.measure1.pushButton.clicked.connect(self.measure1.PushMeasurement)
@@ -326,6 +323,10 @@ class Manager:
         self.viewex2.rcur.setText(repcur)
         weightcur = musclist[xm].weight
         self.viewex2.wcur.setText(weightcur)
+
+        for item in musclist:
+            x = "Sets: " + str(item.sets) + "    |   Reps: " + str(item.reps) + "    |   Weight: " + str(item.weight) + "\n"
+            self.viewex2.textBrowser.append(x)
     
      
 
