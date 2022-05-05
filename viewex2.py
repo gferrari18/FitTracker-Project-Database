@@ -94,9 +94,6 @@ class Ui_ViewEx2(object):
         self.scur.setAlignment(QtCore.Qt.AlignCenter)
         self.scur.setObjectName("scur")
         self.verticalLayout_10.addWidget(self.scur)
-        self.pushButton_4 = QtWidgets.QPushButton(ViewEx2)
-        self.pushButton_4.setGeometry(QtCore.QRect(60, 620, 181, 61))
-        self.pushButton_4.setObjectName("pushButton_4")
         self.verticalLayoutWidget_11 = QtWidgets.QWidget(ViewEx2)
         self.verticalLayoutWidget_11.setGeometry(QtCore.QRect(410, 290, 160, 51))
         self.verticalLayoutWidget_11.setObjectName("verticalLayoutWidget_11")
@@ -235,7 +232,6 @@ class Ui_ViewEx2(object):
         self.pushButton_3.setText(_translate("ViewEx2", "Return"))
         self.entername_5.setText(_translate("ViewEx2", "Reps"))
         self.entername_8.setText(_translate("ViewEx2", "Initial"))
-        self.pushButton_4.setText(_translate("ViewEx2", "Get Results!"))
         self.entername_3.setText(_translate("ViewEx2", "Current"))
         self.entername_6.setText(_translate("ViewEx2", "Weight"))
 

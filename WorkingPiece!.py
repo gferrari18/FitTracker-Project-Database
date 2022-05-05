@@ -1,3 +1,4 @@
+from msilib.schema import Class
 from Main import Ui_MainWindow
 from nonregusrscreen import Ui_NonRegUserScreen
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -11,6 +12,15 @@ from viewex2 import Ui_ViewEx2
 import os
 import time
 import collections
+
+
+class MuscleGroup:
+    def __init__(self, muscname='', exname='',sets='',reps='',weight=''):
+        self.muscname= muscname
+        self.exname = exname
+        self.sets = sets
+        self.reps = reps
+        self.weight = weight
 
 
 class Firstwindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -37,7 +47,7 @@ class NonRegwindow(QtWidgets.QDialog, Ui_NonRegUserScreen):
             self.entername.setText("This name is already in use. Try another one")
             f.close()
 
-        elif f.readline() == "":
+        else:
             manager.openchoice()
 
 class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen):
@@ -103,7 +113,7 @@ class Measure2(QtWidgets.QDialog, Ui_measure2):
         super(Measure2, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_3.clicked.connect(self.hide)
-        self.pushButton_4.clicked.connect(self.updatetable)
+        #self.pushButton_4.clicked.connect(self.updatetable)
 
     def updatetable(self):
         manager.average("1-", self.wecur.text(),self.weavg.setText)
@@ -144,20 +154,20 @@ class ViewEx1(QtWidgets.QDialog, Ui_viewex1):
     def __init__(self, parent = None):
         super(ViewEx1, self).__init__(parent)
         self.setupUi(self)
+        self.pushButton.clicked.connect(self.viewexcheck)
         self.pushButton_2.clicked.connect(self.hide)
         self.pushButton_2.clicked.connect(self.comboBox_2.clear)
 
-        def viewexcheck(self):
-            if self.comboBox.currentText() == "" or self.comboBox_2.currentText() == "":
-                self.label_6.setText("You must fill all boxes!")
-            else:
-                userUP = (self.entername.text()).upper()   # NEED TO CHANGE THIS SO IT GOES TO THE OTHER SCREEN!
-                entry = ((self.comboBox.currentText())+ " " + (self.comboBox_2.currentText())+ " " + (self.spinBox.text())+ " " + (self.spinBox_2.text()) + " " + (self.spinBox_3.text())+ "\n")
-                f = open(userUP + ".txt", "a")
-                f.write(entry)
-                f.close()
-                self.label_6.setText("Entry for " + (self.comboBox_2.currentText()) + " was registered")
-                self.comboBox.setCurrentIndex(0)
+
+    def viewexcheck(self):
+        if self.comboBox.currentText() == "" or self.comboBox_2.currentText() == "":
+            self.label_6.setText("You must fill all boxes!")
+        else:
+            self.hide()
+            manager.viewex2.ExName.setText(self.comboBox_2.currentText())
+            manager.viewex2.show()
+            manager.UpdateViewEx2()
+            
 
 class ViewEx2(QtWidgets.QDialog,Ui_ViewEx2):
     def __init__(self,parent=None):
@@ -190,30 +200,21 @@ class Manager:
         self.third.pushButton_2.clicked.connect(self.first.show)
         self.measure1.pushButton_2.clicked.connect(self.choose.show)
         self.measure2.pushButton_3.clicked.connect(self.choose.show)
-        self.viewex1.pushButton.clicked.connect(self.viewex2.show)
         self.choose.pushButton.clicked.connect(self.measure1.show)
         self.choose.pushButton_2.clicked.connect(self.enterex.show)
         self.choose.pushButton_3.clicked.connect(self.viewex1.show)
-        self.choose.pushButton_2.clicked.connect(self.UpdateComBox)
-        self.choose.pushButton_3.clicked.connect(self.UpdateComBox2)
+        self.enterex.comboBox.activated.connect(self.UpdateComBox)
+        self.viewex1.comboBox.activated.connect(self.UpdateComBox2)
         self.enterex.pushButton_2.clicked.connect(self.choose.show)
         self.viewex1.pushButton_2.clicked.connect(self.choose.show)
         self.viewex2.pushButton_3.clicked.connect(self.choose.show)
         self.first.show()
 
-
-
-        #linked to functions related to NonReg window
-        self.second.pushButton.clicked.connect(self.second.register)
-
-        #linked to functions related to Reg window
-        self.third.pushButton.clicked.connect(self.third.openuser)
-
-        #linked to functions related to measure1
-        self.measure1.pushButton.clicked.connect(self.measure1.PushMeasurement)
-
-        #linked to functions related to measure2
         
+        self.second.pushButton.clicked.connect(self.second.register)
+        self.third.pushButton.clicked.connect(self.third.openuser)
+        self.measure1.pushButton.clicked.connect(self.measure1.PushMeasurement)
+        self.measure1.pushButton.clicked.connect(self.measure2.updatetable)
 
     def openchoice(self):
         self.third.hide()
@@ -224,11 +225,13 @@ class Manager:
             self.measure2.entername_8.setText((self.third.lineEdit.text()).capitalize())
             self.enterex.entername.setText((self.third.lineEdit.text()).capitalize())
             self.viewex1.entername.setText((self.third.lineEdit.text()).capitalize())
+            self.viewex2.entername_8.setText((self.third.lineEdit.text()).capitalize())
         else: 
             self.measure1.entername_6.setText((self.second.lineEdit.text()).capitalize())
             self.measure2.entername_8.setText((self.second.lineEdit.text()).capitalize())
             self.enterex.entername.setText((self.second.lineEdit.text()).capitalize())
-            self.viewex1.entername.setText((self.third.lineEdit.text()).capitalize())
+            self.viewex1.entername.setText((self.second.lineEdit.text()).capitalize())
+            self.viewex2.entername_8.setText((self.second.lineEdit.text()).capitalize())
 
     def openmeasure2(self):
         self.measure1.hide()
@@ -265,57 +268,66 @@ class Manager:
                 hm = line[2:].strip()
                 measure.append(hm)
         l = measure.popleft()
-        print(str(l))
         add(l)
 
     def UpdateComBox(self):
+        self.enterex.comboBox_2.clear()
         userUP = self.enterex.entername.text().upper()
         items = []
         f = open(userUP + ".txt", "r")
-        for line in f:
-            if line.startswith("Arms"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Back"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Chest"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Legs"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Shoulders"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
+        if self.enterex.comboBox.currentText() != "":
+            for line in f:
+                if line.startswith(self.enterex.comboBox.currentText()):
+                    hm = line.strip().split(" ")
+                    if hm[1] not in items: items.append(hm[1])
+        f.close()
         self.enterex.comboBox_2.addItems(items)
         self.enterex.comboBox_2.setCurrentIndex(0)
     
 
+  
     def UpdateComBox2(self):
+        self.viewex1.comboBox_2.clear()
         userUP = self.viewex1.entername.text().upper()
         items = []
         f = open(userUP + ".txt", "r")
-        for line in f:
-            if line.startswith("Arms"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Back"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Chest"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Legs"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
-            if line.startswith("Shoulders"):
-                hm = line.strip().split(" ")
-                if hm[1] not in items: items.append(hm[1])
+        if self.viewex1.comboBox.currentText() != "":
+            for line in f:
+                if line.startswith(self.viewex1.comboBox.currentText()):
+                    hm = line.strip().split(" ")
+                    if hm[1] not in items: items.append(hm[1])
+        f.close()
         self.viewex1.comboBox_2.addItems(items)
         self.viewex1.comboBox_2.setCurrentIndex(0)
 
 
+    def UpdateViewEx2(self):
+        userUP = (self.viewex1.entername.text()).upper()
+        f = open(userUP + ".txt", "r")
+        musclist = []
+        for line in f:
+            if line.startswith(self.viewex1.comboBox.currentText()):
+                hm = line.strip().split(" ")
+                musc = MuscleGroup(hm[0],hm[1],hm[2],hm[3],hm[4])
+                if musc.exname == self.viewex1.comboBox_2.currentText():
+                    musclist.append(musc)
+        f.close()
+
+        setini = musclist[0].sets
+        self.viewex2.sini.setText(setini)
+        repini = musclist[0].reps
+        self.viewex2.rini.setText(repini)
+        weightini = musclist[0].weight
+        self.viewex2.wini.setText(weightini)
+        xm = (len(musclist) - 1)
+        setcur = musclist[xm].sets
+        self.viewex2.scur.setText(setcur)
+        repcur = musclist[xm].reps
+        self.viewex2.rcur.setText(repcur)
+        weightcur = musclist[xm].weight
+        self.viewex2.wcur.setText(weightcur)
+    
+     
 
 if __name__ == '__main__':
     import sys

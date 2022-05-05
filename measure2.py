@@ -330,9 +330,6 @@ class Ui_measure2(object):
         self.entername_8.setAlignment(QtCore.Qt.AlignCenter)
         self.entername_8.setObjectName("entername_8")
         self.verticalLayout_20.addWidget(self.entername_8)
-        self.pushButton_4 = QtWidgets.QPushButton(measure2)
-        self.pushButton_4.setGeometry(QtCore.QRect(80, 600, 181, 61))
-        self.pushButton_4.setObjectName("pushButton_4")
 
         self.retranslateUi(measure2)
         QtCore.QMetaObject.connectSlotsByName(measure2)
@@ -349,7 +346,6 @@ class Ui_measure2(object):
         self.entername_7.setText(_translate("measure2", "Thighs(Avg.)"))
         self.pushButton_3.setText(_translate("measure2", "Return"))
         self.entername_8.setText(_translate("measure2", "Initial"))
-        self.pushButton_4.setText(_translate("measure2", "Get Results!"))
 
 
 if __name__ == "__main__":
