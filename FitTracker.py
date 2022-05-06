@@ -143,7 +143,7 @@ class EnterEx(QtWidgets.QDialog, Ui_EnterEx):
             self.label_6.setText("You must fill all boxes!")
         else:
             userUP = (self.entername.text()).upper()
-            entry = ((self.comboBox.currentText())+ " " + (self.comboBox_2.currentText())+ " " + (self.spinBox.text())+ " " + (self.spinBox_2.text()) + " " + (self.spinBox_3.text())+ "\n")
+            entry = ((self.comboBox.currentText())+ "|" + (self.comboBox_2.currentText())+ "|" + (self.spinBox.text())+ "|" + (self.spinBox_2.text()) + "|" + (self.spinBox_3.text())+ "\n")
             f = open(userUP + ".txt", "a")
             f.write(entry)
             f.close()
@@ -276,7 +276,7 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
         if self.enterex.comboBox.currentText() != "":
             for line in f:
                 if line.startswith(self.enterex.comboBox.currentText()):
-                    hm = line.strip().split(" ")
+                    hm = line.strip().split("|")
                     if hm[1] not in items: items.append(hm[1])
         f.close()
         self.enterex.comboBox_2.addItems(items)
@@ -292,7 +292,7 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
         if self.viewex1.comboBox.currentText() != "":
             for line in f:
                 if line.startswith(self.viewex1.comboBox.currentText()):
-                    hm = line.strip().split(" ")
+                    hm = line.strip().split("|")
                     if hm[1] not in items: items.append(hm[1])
         f.close()
         self.viewex1.comboBox_2.addItems(items)
@@ -305,7 +305,7 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
         musclist = []
         for line in f:
             if line.startswith(self.viewex1.comboBox.currentText()):
-                hm = line.strip().split(" ")
+                hm = line.strip().split("|")
                 musc = MuscleGroup(hm[0],hm[1],hm[2],hm[3],hm[4])
                 if musc.exname == self.viewex1.comboBox_2.currentText():
                     musclist.append(musc)
