@@ -1,4 +1,4 @@
-('C:\\Users\\gusfe\\Documents\\Python\\project1\\build\\FitTracker\\PYZ-00.pyz',
+('C:\\Users\\gusfe\\Documents\\Python\\Project1\\build\\FitTracker\\PYZ-00.pyz',
  [('inspect',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\inspect.py',
@@ -14,14 +14,6 @@
   ('importlib.metadata',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\importlib\\metadata.py',
-   'PYMODULE'),
-  ('importlib.abc',
-   'C:\\Program '
-   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\importlib\\abc.py',
-   'PYMODULE'),
-  ('typing',
-   'C:\\Program '
-   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\typing.py',
    'PYMODULE'),
   ('contextlib',
    'C:\\Program '
@@ -70,18 +62,6 @@
   ('bz2',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\bz2.py',
-   'PYMODULE'),
-  ('_strptime',
-   'C:\\Program '
-   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\_strptime.py',
-   'PYMODULE'),
-  ('datetime',
-   'C:\\Program '
-   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\datetime.py',
-   'PYMODULE'),
-  ('calendar',
-   'C:\\Program '
-   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\calendar.py',
    'PYMODULE'),
   ('threading',
    'C:\\Program '
@@ -150,6 +130,18 @@
   ('email._parseaddr',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\email\\_parseaddr.py',
+   'PYMODULE'),
+  ('calendar',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\calendar.py',
+   'PYMODULE'),
+  ('datetime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\datetime.py',
+   'PYMODULE'),
+  ('_strptime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\_strptime.py',
    'PYMODULE'),
   ('socket',
    'C:\\Program '
@@ -591,6 +583,10 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\asyncio\\staggered.py',
    'PYMODULE'),
+  ('typing',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\typing.py',
+   'PYMODULE'),
   ('asyncio.tasks',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\asyncio\\tasks.py',
@@ -819,6 +815,10 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\csv.py',
    'PYMODULE'),
+  ('importlib.abc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\importlib\\abc.py',
+   'PYMODULE'),
   ('importlib._bootstrap',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\importlib\\_bootstrap.py',
@@ -847,6 +847,10 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\ast.py',
    'PYMODULE'),
+  ('stringprep',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\stringprep.py',
+   'PYMODULE'),
   ('_py_abc',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\_py_abc.py',
@@ -855,41 +859,37 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\tracemalloc.py',
    'PYMODULE'),
-  ('stringprep',
-   'C:\\Program '
-   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\stringprep.py',
-   'PYMODULE'),
   ('os',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.9_3.9.2800.0_x64__qbz5n2kfra8p0\\lib\\os.py',
    'PYMODULE'),
   ('viewex2',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\viewex2.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\viewex2.py',
    'PYMODULE'),
   ('viewex1',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\viewex1.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\viewex1.py',
    'PYMODULE'),
   ('EnterEx',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\EnterEx.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\EnterEx.py',
    'PYMODULE'),
   ('measure2',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\measure2.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\measure2.py',
    'PYMODULE'),
   ('measure1',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\measure1.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\measure1.py',
    'PYMODULE'),
   ('Choose',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\Choose.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\Choose.py',
    'PYMODULE'),
   ('reguserscreen',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\reguserscreen.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\reguserscreen.py',
    'PYMODULE'),
   ('PyQt5',
    'C:\\Users\\gusfe\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages\\PyQt5\\__init__.py',
    'PYMODULE'),
   ('nonregusrscreen',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\nonregusrscreen.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\nonregusrscreen.py',
    'PYMODULE'),
   ('Main',
-   'C:\\Users\\gusfe\\Documents\\Python\\project1\\Main.py',
+   'C:\\Users\\gusfe\\Documents\\Python\\Project1\\Main.py',
    'PYMODULE')])
