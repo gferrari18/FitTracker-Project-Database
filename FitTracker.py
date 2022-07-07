@@ -11,6 +11,8 @@ from viewex2 import Ui_ViewEx2
 import os
 import collections
 import time
+import pyodbc
+
 
 
 class MuscleGroup: #set up class musclegroup so we can sepparate it once entered by user
@@ -41,14 +43,20 @@ class NonRegwindow(QtWidgets.QDialog, Ui_NonRegUserScreen): #sets up window for 
         if userUP == "": #does not allow user to create a file without a name. Works fine, but does not look good
             self.entername.setText("You must enter a name!")
         if userUP != "":
-            f = open(userUP + ".txt", "a") #if start with "r", will give an error if file does not exist
-            f.close()
-            f = open(userUP + ".txt", "r")
-            if f.readline() != "": #this ensures another file with the same name does not exist
-                self.entername.setText("This name is already in use. Try another one")
-                f.close()
-            else:
+            sql = "SELECT COUNT(*) as C FROM Username WHERE username=?"
+            crsr = db.cursor()
+            res = crsr.execute(sql, (userUP))
+            row = crsr.fetchone()
+            if row.C == 0:
+                sql = "INSERT INTO username (Username) VALUES (?)"    
+                crsr = db.cursor()
+                crsr.execute(sql, (userUP))
+                crsr.commit()
                 manager.openchoice()
+                crsr.close()
+            else:
+                self.entername.setText("You must enter an unique name!")
+            
 
 class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen): #Sets up window for registered users
     
@@ -58,18 +66,19 @@ class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen): #Sets up window for regist
         self.pushButton_2.clicked.connect(self.hide)
 
     def openuser(self): #ensures user account actually exists and contains data
-        user = self.lineEdit.text()
-        userUP = user.upper()
-        f = open(userUP + ".txt", "a") #if start with "r", will give an error if file does not exist
-        f.close()
-        f = open(userUP + ".txt", "r")
-        if f.readline() == "":
-            self.entername.setText("This name does not seem to be registered.")
-            f.close()
-            os.remove(userUP + ".txt") #removes the blank file we just created so it does not create clutter
-        
-        else:
-            manager.openchoice()
+        userUP= self.lineEdit.text().upper()
+        if userUP == "": #does not allow user to create a file without a name. Works fine, but does not look good
+            self.entername.setText("You must enter a name!")
+        if userUP != "":
+            sql = "SELECT COUNT(*) as C FROM Username WHERE username=?"
+            crsr = db.cursor()
+            res = crsr.execute(sql, (userUP))
+            row = crsr.fetchone()
+            if row.C == 0:
+                self.entername.setText("This name is not registered!")
+            else:
+                manager.openchoice()
+                
             
 
 class Choose(QtWidgets.QDialog, Ui_Choose): #Sets up window with different option, so user can choose what they would like to do.
@@ -89,19 +98,26 @@ class Measure1(QtWidgets.QDialog, Ui_measure1): #sets up screen where user types
 
 
     def PushMeasurement(self): #Adds measurements to user's file.
-        weight = "1-" + self.spinweight.text()
-        waist = "2-" + self.spinwaist.text()
-        arms = "3-" + self.spinarms.text()
-        thighs = "4-" + self.spinthighs.text()
+        weight = self.spinweight.text()
+        waist = self.spinwaist.text()
+        arms = self.spinarms.text()
+        thighs = self.spinthighs.text()
+        user = self.entername_6.text().upper()
 
-        user = self.entername_6.text()
-        userUP = user.upper()
-        f = open(userUP + ".txt", "a")
-        f.write(weight + "\n")
-        f.write(waist + "\n")
-        f.write(arms + "\n")
-        f.write(thighs + "\n")
-        f.close()
+        sql = "SELECT ID FROM username U WHERE U.Username=?"
+        crsr = db.cursor()
+        res = crsr.execute(sql, (user))
+        for row in res:
+            ID = (row.__getattribute__('ID'))
+        crsr.close()
+
+        sql = "INSERT INTO measurement (UserID, Weight, Waist, Arms, Thighs) VALUES (?,?,?,?,?)"
+        crsr = db.cursor()
+        crsr.execute(sql,(ID,weight,waist,arms,thighs))
+        crsr.commit()
+        crsr.close()
+        
+
         manager.upmeasure2()
         time.sleep(1)
         manager.openmeasure2()
@@ -115,17 +131,17 @@ class Measure2(QtWidgets.QDialog, Ui_measure2): #sets ups screen were we show us
         self.pushButton_3.clicked.connect(self.hide)
 
     def updatetable(self): #Reads user's file to calculate average then update table in the current screen
-        manager.average("1-", self.wecur.text(),self.weavg.setText)
-        manager.average("2-", self.wacur.text(),self.waavg.setText)
-        manager.average("3-", self.arcur.text(),self.aravg.setText)
-        manager.average("4-", self.thcur.text(),self.thavg.setText)
+        manager.average("Weight", self.wecur.text(),self.weavg.setText)
+        manager.average("Waist", self.wacur.text(),self.waavg.setText)
+        manager.average("Arms", self.arcur.text(),self.aravg.setText)
+        manager.average("Thighs", self.thcur.text(),self.thavg.setText)
         self.initial()
 
     def initial(self): #uses a deque to acquire first ever entry fo each of the measurements
-        manager.initial("1-", self.weini.setText)
-        manager.initial("2-", self.waini.setText)
-        manager.initial("3-", self.arini.setText)
-        manager.initial("4-", self.thini.setText)
+        manager.initial("Weight", self.weini.setText)
+        manager.initial("Waist", self.waini.setText)
+        manager.initial("Arms", self.arini.setText)
+        manager.initial("Thighs", self.thini.setText)
 
 
 
@@ -244,29 +260,48 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
     def average(self, n, o, add): #used to calculate average on measure2 window
         userUP = self.measure2.entername_8.text().upper()
-        f = open(userUP + ".txt", "r")
+        sql = "SELECT ID FROM username U WHERE U.Username=?"
+        crsr = db.cursor()
+        res = crsr.execute(sql, (userUP))
+        for row in res:
+            ID = (row.__getattribute__('ID'))
+        crsr.close()
+        
         avg = 0
         hm = 0
-        for line in f:
-            if line.startswith(n):
-                hm = hm + float(line[2:].strip())
-                avg = avg + 1
+
+        sql = "SELECT " + n + " FROM measurement M where M.UserID=?"
+        crsr = db.cursor()
+        res = crsr.execute(sql, (ID))
+        for row in res:
+            num = (row.__getattribute__(n))
+            hm = hm + float(num)
+            avg = avg + 1
+        
         resavg = hm / avg
         avgtot = (float(o) - float(resavg))
         avgtotd = "{:.2f}".format(avgtot)
         add(str(avgtotd))
-        f.close()
 
     def initial(self, n, add): #Created a deque so i can retrieve the first ever entry for a specific measurement
         userUP = self.measure2.entername_8.text().upper()
+        sql = "SELECT ID FROM Username U where U.Username=?"
+        crsr = db.cursor()
+        res = crsr.execute(sql, (userUP))
+        for row in res:
+            id = (row.__getattribute__('ID'))
+        crsr.close()
+
         measure = collections.deque()
-        f = open(userUP + ".txt", "r")
-        for line in f:
-            if line.startswith(n):
-                hm = line[2:].strip()
-                measure.append(hm)
+        sql = "SELECT " + n + " FROM measurement M WHERE M.UserID=?"
+        crsr = db.cursor()
+        res = crsr.execute(sql, (id))
+        for row in res:
+            hm = (row.__getattribute__(n))
+            measure.append(hm)
+
         l = measure.popleft()
-        add(l)
+        add(str(l))
 
     def UpdateComBox(self): #updates combobox entries so user does not have to retype/minimizes risk of user mistyping a workout they have already done
         self.enterex.comboBox_2.clear()
@@ -333,6 +368,8 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
 if __name__ == '__main__':
     import sys
+    connect = 'DRIVER={MySQL ODBC 8.0 Unicode Driver}; SERVER=localhost; PORT=3306;DATABASE=project1; UID=root; PASSWORD=;'
+    db = pyodbc.connect(connect)
     app = QtWidgets.QApplication(sys.argv)
     manager = Manager()
     sys.exit(app.exec_())
