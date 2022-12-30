@@ -12,13 +12,12 @@ import os
 import collections
 import time
 import pyodbc
+import webbrowser
 
 
 
 class MuscleGroup: #set up class musclegroup so we can sepparate it once entered by user
-    def __init__(self, muscname='', exname='',sets='',reps='',weight=''):
-        self.muscname= muscname
-        self.exname = exname
+    def __init__(self,sets='',reps='',weight=''):
         self.sets = sets
         self.reps = reps
         self.weight = weight
@@ -28,8 +27,11 @@ class Firstwindow(QtWidgets.QMainWindow, Ui_MainWindow): #sets up greeting windo
     def __init__(self, parent=None):
         super(Firstwindow, self).__init__(parent)
         self.setupUi(self)
-        self.pushButton_2.clicked.connect(self.hide)
+        #self.pushButton_2.clicked.connect(self.hide)
         self.pushButton.clicked.connect(self.hide)
+
+    def registerweb(self): #redirects user to React website
+        webbrowser.open('www.google.com')
 
 
 class NonRegwindow(QtWidgets.QDialog, Ui_NonRegUserScreen): #sets up window for non registered users
@@ -70,7 +72,7 @@ class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen): #Sets up window for regist
         if userUP == "": #does not allow user to create a file without a name. Works fine, but does not look good
             self.entername.setText("You must enter a name!")
         if userUP != "":
-            sql = "SELECT COUNT(*) as C FROM Username WHERE username=?"
+            sql = "SELECT COUNT(*) as C FROM loginfo WHERE username=?"
             crsr = db.cursor()
             res = crsr.execute(sql, (userUP))
             row = crsr.fetchone()
@@ -78,6 +80,7 @@ class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen): #Sets up window for regist
                 self.entername.setText("This name is not registered!")
             else:
                 manager.openchoice()
+            crsr.close()
                 
             
 
@@ -104,11 +107,11 @@ class Measure1(QtWidgets.QDialog, Ui_measure1): #sets up screen where user types
         thighs = self.spinthighs.text()
         user = self.entername_6.text().upper()
 
-        sql = "SELECT ID FROM username U WHERE U.Username=?"
+        sql = "SELECT username FROM loginfo U WHERE U.username=?"
         crsr = db.cursor()
         res = crsr.execute(sql, (user))
         for row in res:
-            ID = (row.__getattribute__('ID'))
+            ID = (row.__getattribute__('username'))
         crsr.close()
 
         sql = "INSERT INTO measurement (UserID, Weight, Waist, Arms, Thighs) VALUES (?,?,?,?,?)"
@@ -158,14 +161,21 @@ class EnterEx(QtWidgets.QDialog, Ui_EnterEx):
         if self.comboBox.currentText() == "" or self.comboBox_2.currentText() == "": #This does not let user to create a "blank" workout
             self.label_6.setText("You must fill all boxes!")
         else:
-            userUP = (self.entername.text()).upper()
-            entry = ((self.comboBox.currentText())+ "|" + (self.comboBox_2.currentText())+ "|" + (self.spinBox.text())+ "|" + (self.spinBox_2.text()) + "|" + (self.spinBox_3.text())+ "\n")
-            f = open(userUP + ".txt", "a")
-            f.write(entry)
-            f.close()
+            user = self.entername.text()
+            group = self.comboBox.currentText()
+            exercise = self.comboBox_2.currentText()
+            sets = self.spinBox.text()
+            reps= self.spinBox_2.text()
+            weight = self.spinBox_3.text()
+            sql = "INSERT INTO exercises (UserID, musgroup, exercise, sets, reps, weight) VALUES (?,?,?,?,?,?)"
+            
+            crsr = db.cursor()
+            crsr.execute(sql,(user,group,exercise,sets,reps,weight))
+            crsr.commit()
+            crsr.close()
+
             self.label_6.setText("Entry for " + (self.comboBox_2.currentText()) + " was registered") #informs user that entry was added
             self.comboBox.setCurrentIndex(0) #reverts combox index to "", so user has to actively change it prior to making another entry
-
 
 
 class ViewEx1(QtWidgets.QDialog, Ui_viewex1): # Creates window were user can choose which workout history they would like to inspect
@@ -210,7 +220,7 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
     
         #Here are button press related items. Either to go or update a different screen
         self.first.pushButton.clicked.connect(self.third.show)
-        self.first.pushButton_2.clicked.connect(self.second.show)
+        self.first.pushButton_2.clicked.connect(self.first.registerweb)
         self.second.pushButton_2.clicked.connect(self.first.show)
         self.third.pushButton_2.clicked.connect(self.first.show)
         self.measure1.pushButton_2.clicked.connect(self.choose.show)
@@ -260,11 +270,11 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
     def average(self, n, o, add): #used to calculate average on measure2 window
         userUP = self.measure2.entername_8.text().upper()
-        sql = "SELECT ID FROM username U WHERE U.Username=?"
+        sql = "SELECT username FROM loginfo U WHERE U.Username=?"
         crsr = db.cursor()
         res = crsr.execute(sql, (userUP))
         for row in res:
-            ID = (row.__getattribute__('ID'))
+            ID = (row.__getattribute__('username'))
         crsr.close()
         
         avg = 0
@@ -285,11 +295,11 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
     def initial(self, n, add): #Created a deque so i can retrieve the first ever entry for a specific measurement
         userUP = self.measure2.entername_8.text().upper()
-        sql = "SELECT ID FROM Username U where U.Username=?"
+        sql = "SELECT username FROM loginfo U where U.Username=?"
         crsr = db.cursor()
         res = crsr.execute(sql, (userUP))
         for row in res:
-            id = (row.__getattribute__('ID'))
+            id = (row.__getattribute__('username'))
         crsr.close()
 
         measure = collections.deque()
@@ -305,15 +315,16 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
     def UpdateComBox(self): #updates combobox entries so user does not have to retype/minimizes risk of user mistyping a workout they have already done
         self.enterex.comboBox_2.clear()
-        userUP = self.enterex.entername.text().upper()
+        user = self.enterex.entername.text()
+        group = self.enterex.comboBox.currentText()
         items = []
-        f = open(userUP + ".txt", "r")
-        if self.enterex.comboBox.currentText() != "":
-            for line in f:
-                if line.startswith(self.enterex.comboBox.currentText()):
-                    hm = line.strip().split("|")
-                    if hm[1] not in items: items.append(hm[1])
-        f.close()
+        sql = "SELECT exercise FROM exercises e where e.musgroup=? and e.UserID=?"
+        crsr = db.cursor()
+        res = crsr.execute(sql, (group,user))
+        for row in res:
+            ans = (row.__getattribute__("exercise"))
+            if ans not in items:
+                items.append(ans)
         self.enterex.comboBox_2.addItems(items)
         self.enterex.comboBox_2.setCurrentIndex(0)
     
@@ -335,16 +346,20 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
 
     def UpdateViewEx2(self): #Used to update items in viewex2 window. Reads items in the file, create objects under a class and then retrieves their info
-        userUP = (self.viewex1.entername.text()).upper()
-        f = open(userUP + ".txt", "r")
+        user = self.viewex1.entername.text()
+        exer = self.viewex1.comboBox_2.currentText()
+        sql = 'SELECT * FROM exercises e WHERE e.userID=? AND e.exercise=?'
+        crsr = db.cursor()
+        res = crsr.execute(sql,(user,exer))
         musclist = []
-        for line in f:
-            if line.startswith(self.viewex1.comboBox.currentText()):
-                hm = line.strip().split("|")
-                musc = MuscleGroup(hm[0],hm[1],hm[2],hm[3],hm[4])
-                if musc.exname == self.viewex1.comboBox_2.currentText():
-                    musclist.append(musc)
-        f.close()
+        for row in res:
+            sets = row.__getattribute__('sets')
+            reps = row.__getattribute__('reps')
+            weight = row.__getattribute__('weight')
+            musc = MuscleGroup(sets,reps,weight)
+            musclist.append(musc)
+        crsr.close()
+      
 
         setini = musclist[0].sets
         self.viewex2.sini.setText(setini)
@@ -368,7 +383,7 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
 if __name__ == '__main__':
     import sys
-    connect = 'DRIVER={MySQL ODBC 8.0 Unicode Driver}; SERVER=localhost; PORT=3306;DATABASE=project1; UID=root; PASSWORD=;'
+    connect = 'DRIVER={MySQL ODBC 8.0 Unicode Driver}; SERVER=127.0.0.1; PORT=3306;DATABASE=nice; UID=root; PASSWORD=76495312;'
     db = pyodbc.connect(connect)
     app = QtWidgets.QApplication(sys.argv)
     manager = Manager()
