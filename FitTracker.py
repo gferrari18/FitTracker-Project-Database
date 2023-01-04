@@ -68,16 +68,17 @@ class Regwindow(QtWidgets.QDialog, Ui_RegUserScreen): #Sets up window for regist
         self.pushButton_2.clicked.connect(self.hide)
 
     def openuser(self): #ensures user account actually exists and contains data
-        userUP= self.lineEdit.text().upper()
-        if userUP == "": #does not allow user to create a file without a name. Works fine, but does not look good
+        user= self.lineEdit.text()
+        password = self.lineEdit2.text()
+        if user == "": #does not allow user to create a file without a name. Works fine, but does not look good
             self.entername.setText("You must enter a name!")
-        if userUP != "":
-            sql = "SELECT COUNT(*) as C FROM loginfo WHERE username=?"
+        if user != "":
+            sql = "SELECT COUNT(*) as C FROM loginfo WHERE username=? AND password=?"
             crsr = db.cursor()
-            res = crsr.execute(sql, (userUP))
+            res = crsr.execute(sql, (user,password))
             row = crsr.fetchone()
             if row.C == 0:
-                self.entername.setText("This name is not registered!")
+                self.entername.setText("Password or username is incorrect!")
             else:
                 manager.openchoice()
             crsr.close()
@@ -332,18 +333,20 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
   
     def UpdateComBox2(self): #updates combobox 2 with all workouts for a specific muscle group based on combobox 1.
         self.viewex1.comboBox_2.clear()
-        userUP = self.viewex1.entername.text().upper()
+        user = self.viewex1.entername.text()
+        group = self.viewex1.comboBox.currentText()
         items = []
-        f = open(userUP + ".txt", "r")
-        if self.viewex1.comboBox.currentText() != "":
-            for line in f:
-                if line.startswith(self.viewex1.comboBox.currentText()):
-                    hm = line.strip().split("|")
-                    if hm[1] not in items: items.append(hm[1])
-        f.close()
+        sql = "SELECT exercise FROM exercises e where e.musgroup=? and e.UserID=?"
+        crsr = db.cursor()
+        res = crsr.execute(sql, (group,user))
+        for row in res:
+            ans = (row.__getattribute__("exercise"))
+            if ans not in items:
+                items.append(ans)
         self.viewex1.comboBox_2.addItems(items)
         self.viewex1.comboBox_2.setCurrentIndex(0)
 
+      
 
     def UpdateViewEx2(self): #Used to update items in viewex2 window. Reads items in the file, create objects under a class and then retrieves their info
         user = self.viewex1.entername.text()
