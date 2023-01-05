@@ -386,7 +386,7 @@ class Manager: #Used to easily manage all windows. Some functions where left wit
 
 if __name__ == '__main__':
     import sys
-    connect = 'DRIVER={MySQL ODBC 8.0 Unicode Driver}; SERVER=fittracker2.cx4y93gaxeqj.us-west-2.rds.amazonaws.com; PORT=3306; DATABASE=nice; UID=admin; PASSWORD=AVjtUqkbVOJRzeOQGAAh;'
+    connect = 'DRIVER={MySQL ODBC 8.0 Unicode Driver}; SERVER=*; PORT=3306; DATABASE=nice; UID=admin; PASSWORD=*;'
     db = pyodbc.connect(connect)
     app = QtWidgets.QApplication(sys.argv)
     manager = Manager()
